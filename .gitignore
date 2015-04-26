@@ -30,3 +30,6 @@ $RECYCLE.BIN/
 #### exclude datasets
 *.bz2
 *.csv
+
+# Exclude knitr cache folder
+*_cache/
