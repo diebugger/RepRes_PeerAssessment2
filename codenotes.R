@@ -7,13 +7,13 @@ library("ggplot2")
 # load dataset
 StormData <- read.csv(bzfile("repdata-data-StormData.csv.bz2", "rt"))
 
-# preprocess dataset
-StormData$BGN_DATE <- as.Date.character(StormData$BGN_DATE, "%m/%d/%Y %H:%M:%S")
-StormData$END_DATE <- as.Date.character(StormData$END_DATE, "%m/%d/%Y %H:%M:%S")
+# preprocess dataset (not used)
+#StormData$BGN_DATE <- as.Date.character(StormData$BGN_DATE, "%m/%d/%Y %H:%M:%S")
+#StormData$END_DATE <- as.Date.character(StormData$END_DATE, "%m/%d/%Y %H:%M:%S")
 # BGN_TIME and BGN_END are not homogeneus and cannot be successfully converted
 
 # add sum of population damages and group by event type
-StormData <- StormData %>% mutate(POP_HEALTH_DMG = sum(INJURIES, FATALITIES)) %>% group_by(EVTYPE) 
+StormData <- StormData %>% group_by(EVTYPE) %>% mutate(POP_HEALTH_DMG = sum(INJURIES, FATALITIES))
 
 # subset for ease of use
 PopDmg <- StormData[, c(8,38)]
@@ -54,7 +54,7 @@ PropertyDmg <- PropertyDmg %>% mutate(DMGSUM = sum(PROPDMG, CROPDMG)) %>% group_
 PropertyDmg <- PropertyDmg[order(PropertyDmg$DMGSUM, na.last = T, decreasing = T), ]
 
 # shrink dataset and remove duplicates
-PropertyDmgByEvType <- Propertypng(Dmg[, c(1, 4)]
+PropertyDmgByEvType <- PropertyDmg[, c(1, 4)]
 PropertyDmgByEvType <- PropertyDmgByEvType[!duplicated(PropertyDmgByEvType), ]
 
 # question answer plot
