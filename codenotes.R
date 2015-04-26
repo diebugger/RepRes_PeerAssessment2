@@ -40,8 +40,8 @@ PropertyDmg <- PropertyDmg[
   ,]
 
 # calculate the correct damage amount value based on marked magnitude (K, M, B)
-PropertyDmg$PROPDMG <- GetCorrectAmount(PropertyDmg$PROPDMG, PropertyDmg$PROPDMGEXP)
-PropertyDmg$CROPDMG <- GetCorrectAmount(PropertyDmg$CROPDMG, PropertyDmg$CROPDMGEXP)
+PropertyDmg$PROPDMG <- GetDamageInBillions(PropertyDmg$PROPDMG, PropertyDmg$PROPDMGEXP)
+PropertyDmg$CROPDMG <- GetDamageInBillions(PropertyDmg$CROPDMG, PropertyDmg$CROPDMGEXP)
 
 # drop unused variables (3,5)
 PropertyDmg <- PropertyDmg[, c(1, 2, 4)]
@@ -50,7 +50,7 @@ PropertyDmg <- PropertyDmg[, c(1, 2, 4)]
 #options(digits = 4)
 
 # make sum of damage by event type and order by sum desc
-PropertyDmg <- PropertyDmg %>% mutate(DMGSUM = sum(PROPDMG, CROPDMG)) %>% group_by(EVTYPE)
+PropertyDmg <- PropertyDmg %>% group_by(EVTYPE) %>% mutate(DMGSUM = sum(PROPDMG, CROPDMG))
 PropertyDmg <- PropertyDmg[order(PropertyDmg$DMGSUM, na.last = T, decreasing = T), ]
 
 # shrink dataset and remove duplicates
@@ -60,7 +60,7 @@ PropertyDmgByEvType <- PropertyDmgByEvType[!duplicated(PropertyDmgByEvType), ]
 # question answer plot
 barplot(
   PropertyDmgByEvType$DMGSUM[1:10], 
-  main = "Top 20 Damage by Event (in USD)", 
+  main = "Top 10 Damage by Event (in Billions of USD)", 
   names.arg = PropertyDmgByEvType$EVTYPE[1:10], 
   col = "purple", 
   log = "y"

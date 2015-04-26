@@ -70,7 +70,7 @@ PropertyDmg$CROPDMG <- GetDamageInBillions(PropertyDmg$CROPDMG, PropertyDmg$CROP
 PropertyDmg <- PropertyDmg[, c(1, 2, 4)]
 
 # make sum of damage by event type and order by sum desc
-PropertyDmg <- PropertyDmg %>% mutate(DMGSUM = sum(PROPDMG, CROPDMG)) %>% group_by(EVTYPE)
+PropertyDmg <- PropertyDmg %>% group_by(EVTYPE) %>% mutate(DMGSUM = sum(PROPDMG, CROPDMG))
 PropertyDmg <- PropertyDmg[order(PropertyDmg$DMGSUM, na.last = T, decreasing = T), ]
 
 # shrink dataset and remove duplicates
